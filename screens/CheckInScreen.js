@@ -32,12 +32,11 @@ const CheckInScreen = () => {
       model,
       position,
       checkInTime: currentTime,
-      x: Math.random() * 80 + 10, // Random position x (10-90%)
-      y: Math.random() * 80 + 10, // Random position y (10-90%)
+      x: Math.random() * 80 + 10, // Posição aleatória x (10-90%)
+      y: Math.random() * 80 + 10, // Posição aleatória y (10-90%)
     };
 
     try {
-      // Save moto data
       const existingMotos = await AsyncStorage.getItem("motoPositions");
       let motos = [];
       if (existingMotos) {

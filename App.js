@@ -2,7 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-// Screens
 import CheckInScreen from "./screens/CheckInScreen";
 import CheckOutScreen from "./screens/CheckOutScreen";
 import HomeScreen from "./screens/HomeScreen";

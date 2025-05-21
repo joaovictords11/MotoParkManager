@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-// Carrega os ícones antes de usar (solução para o problema)
 MaterialCommunityIcons.loadFont();
 
 const ReportsScreen = () => {

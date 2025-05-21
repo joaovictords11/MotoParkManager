@@ -38,11 +38,9 @@ const CheckOutScreen = () => {
     }
 
     try {
-      // Remove the selected moto
       const updatedMotos = motos.filter((m) => m.plate !== selectedMoto.plate);
       await AsyncStorage.setItem("motoPositions", JSON.stringify(updatedMotos));
 
-      // Update total count
       const total = await AsyncStorage.getItem("totalMotos");
       const newTotal = total ? parseInt(total) - 1 : 0;
       await AsyncStorage.setItem("totalMotos", newTotal.toString());
