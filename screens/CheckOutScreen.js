@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CheckOutScreen = () => {
   const navigation = useNavigation();

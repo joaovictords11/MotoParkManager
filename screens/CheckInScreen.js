@@ -3,13 +3,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
   Alert,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CheckInScreen = () => {
   const navigation = useNavigation();
