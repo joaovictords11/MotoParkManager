@@ -8,16 +8,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "../contexts/ThemeContext"; // 1. Importa o contexto
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const SettingsScreen = () => {
-  // 2. Pega o tema atual, o estado e a função para trocar o tema do contexto
   const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
   const styles = stylesFactory(theme);
 
-  // O botão de salvar não é mais estritamente necessário para o tema,
-  // pois a mudança é aplicada instantaneamente.
-  // Mantemos para outras configurações futuras.
   const handleSaveChanges = () => {
     Alert.alert("Sucesso", "Configurações salvas!");
   };
@@ -29,18 +25,16 @@ const SettingsScreen = () => {
       </View>
 
       <View style={styles.settingsContainer}>
-        {/* Item do Modo Escuro */}
         <View style={styles.settingItem}>
           <Text style={styles.settingText}>Modo Escuro</Text>
           <Switch
             value={isDarkMode}
-            onValueChange={toggleTheme} // 3. Chama a função do contexto diretamente
+            onValueChange={toggleTheme}
             trackColor={{ false: "#767577", true: theme.secondary }}
             thumbColor={isDarkMode ? theme.primary : "#f4f3f4"}
           />
         </View>
 
-        {/* Outros itens de configuração podem vir aqui */}
         <View style={styles.settingItem}>
           <Text style={styles.settingText}>Notificações</Text>
           <Switch disabled />
