@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1048358355965",
+    "project_id": "motopark-manager",
+    "storage_bucket": "motopark-manager.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048358355965:android:89798f8382d734c4e6cf94",
+        "android_client_info": {
+          "package_name": "com.joaovictords11.motoparkmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8dyQw3xrb3Sg3JmM9ffnrdsAzUt4Jk4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
