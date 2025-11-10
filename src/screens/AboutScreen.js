@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeContext } from "../contexts/ThemeContext";
 import i18n from "../i18n/i18n";
 
-const COMMIT_HASH = "c677aa5";
+const COMMIT_HASH = "c70b069";
 const APP_VERSION = "1.0.0";
 
 const AboutScreen = () => {
