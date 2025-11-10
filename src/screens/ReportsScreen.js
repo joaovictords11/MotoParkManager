@@ -6,6 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getMotos } from "../api/api";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
 
 MaterialCommunityIcons.loadFont();
 
@@ -17,7 +18,8 @@ const ReportsScreen = () => {
   const [loading, setLoading] = useState(true);
 
   const getMostCommonModels = (motos) => {
-    if (!motos || motos.length === 0) return "Nenhum dado";
+    if (!motos || motos.length === 0)
+      return i18n.t("reports_common_models_none");
     const modelCount = {};
     motos.forEach((moto) => {
       modelCount[moto.modelo] = (modelCount[moto.modelo] || 0) + 1;
@@ -40,25 +42,27 @@ const ReportsScreen = () => {
       const generatedReports = [
         {
           id: "1",
-          title: "Motos no Pátio",
+          title: i18n.t("reports_item_motos_patio"),
           value: motos.length.toString(),
           icon: "motorbike",
         },
         {
           id: "2",
-          title: "Última Atualização",
+          title: i18n.t("reports_item_last_update"),
           value: new Date().toLocaleTimeString(),
           icon: "clock-outline",
         },
         {
           id: "3",
-          title: "Tema Ativo",
-          value: isDarkMode ? "Modo Escuro" : "Modo Claro",
+          title: i18n.t("reports_item_active_theme"),
+          value: isDarkMode
+            ? i18n.t("reports_theme_dark")
+            : i18n.t("reports_theme_light"),
           icon: "theme-light-dark",
         },
         {
           id: "4",
-          title: "Modelos Mais Comuns",
+          title: i18n.t("reports_item_common_models"),
           value: getMostCommonModels(motos),
           icon: "chart-bar",
         },
@@ -66,11 +70,14 @@ const ReportsScreen = () => {
       setReports(generatedReports);
     } catch (error) {
       console.error("Falha ao gerar relatórios:", error);
-      Alert.alert("Erro", "Não foi possível gerar os relatórios.");
+      Alert.alert(
+        i18n.t("reports_error_alert_title"),
+        i18n.t("reports_error_alert_message")
+      );
     } finally {
       setLoading(false);
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, i18n.locale]); // Adiciona i18n.locale como dependência
 
   useEffect(() => {
     if (isFocused) {
@@ -82,7 +89,7 @@ const ReportsScreen = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
-        <LoadingIndicator text="Gerando relatórios..." />
+        <LoadingIndicator text={i18n.t("reports_loading")} />
       </View>
     );
   }
@@ -90,7 +97,7 @@ const ReportsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Relatórios do App</Text>
+        <Text style={styles.headerText}>{i18n.t("reports_title")}</Text>
       </View>
       <FlatList
         data={reports}
@@ -116,6 +123,7 @@ const ReportsScreen = () => {
   );
 };
 
+// ... (stylesFactory permanece o mesmo)
 const stylesFactory = (theme) =>
   StyleSheet.create({
     container: {

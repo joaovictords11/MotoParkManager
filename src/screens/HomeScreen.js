@@ -10,9 +10,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getMotos } from "../api/api"; // Supondo que a API retorne o total
+import { getMotos } from "../api/api";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
+import { registerForPushNotificationsAsync } from "../services/notificationService";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -25,17 +27,19 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Efeito para registrar notificações na inicialização
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
+
   const loadData = useCallback(async () => {
     try {
-      // Idealmente, sua API teria um endpoint /motos/count ou similar.
-      // Usamos a lista paginada como alternativa.
       const response = await getMotos(0, 1);
-      // A API de paginação do Spring geralmente retorna 'totalElements'
       setTotalMotos(response.data.totalElements || response.data.length || 0);
       setLastUpdate(new Date().toLocaleString());
     } catch (error) {
       console.error("Falha ao carregar os dados:", error);
-      setTotalMotos(0); // Reseta em caso de erro
+      setTotalMotos(0);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -57,7 +61,7 @@ const HomeScreen = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
-        <LoadingIndicator text="Carregando dados do pátio..." />
+        <LoadingIndicator text={i18n.t("home_loading_data")} />
       </View>
     );
   }
@@ -79,17 +83,20 @@ const HomeScreen = () => {
             source={require("../../assets/moto.png")}
             style={styles.logo}
           />
-          <Text style={styles.title}>MotoPark Manager</Text>
+          <Text style={styles.title}>{i18n.t("home_title")}</Text>
         </View>
 
         <View style={styles.statsContainer}>
-          <Text style={styles.statsTitle}>Estatísticas do Pátio</Text>
+          <Text style={styles.statsTitle}>{i18n.t("home_stats_title")}</Text>
           <View style={styles.statsCard}>
             <Text style={styles.statsValue}>{totalMotos}</Text>
-            <Text style={styles.statsLabel}>Motos no pátio</Text>
+            <Text style={styles.statsLabel}>
+              {i18n.t("home_stats_value_label")}
+            </Text>
           </View>
           <Text style={styles.updateText}>
-            Última atualização: {lastUpdate || "N/A"}
+            {i18n.t("home_stats_update_label")}{" "}
+            {lastUpdate || i18n.t("home_stats_na")}
           </Text>
         </View>
 
@@ -102,7 +109,7 @@ const HomeScreen = () => {
               source={require("../../assets/map.png")}
               style={styles.actionIcon}
             />
-            <Text style={styles.actionText}>Ver Mapa</Text>
+            <Text style={styles.actionText}>{i18n.t("home_action_map")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
@@ -112,7 +119,9 @@ const HomeScreen = () => {
               source={require("../../assets/checkIn.png")}
               style={styles.actionIcon}
             />
-            <Text style={styles.actionText}>Fazer Check-In</Text>
+            <Text style={styles.actionText}>
+              {i18n.t("home_action_checkin")}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
@@ -122,7 +131,9 @@ const HomeScreen = () => {
               source={require("../../assets/checkOut.png")}
               style={styles.actionIcon}
             />
-            <Text style={styles.actionText}>Fazer Check-Out</Text>
+            <Text style={styles.actionText}>
+              {i18n.t("home_action_checkout")}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
@@ -132,7 +143,9 @@ const HomeScreen = () => {
               source={require("../../assets/reports.png")}
               style={styles.actionIcon}
             />
-            <Text style={styles.actionText}>Relatórios</Text>
+            <Text style={styles.actionText}>
+              {i18n.t("home_action_reports")}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
@@ -142,7 +155,9 @@ const HomeScreen = () => {
               source={require("../../assets/settings.png")}
               style={styles.actionIcon}
             />
-            <Text style={styles.actionText}>Configurações</Text>
+            <Text style={styles.actionText}>
+              {i18n.t("home_action_settings")}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -150,6 +165,7 @@ const HomeScreen = () => {
   );
 };
 
+// ... (stylesFactory permanece o mesmo)
 const stylesFactory = (theme) =>
   StyleSheet.create({
     container: {

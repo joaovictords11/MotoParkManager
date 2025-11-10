@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
 
 const LoginScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -20,7 +21,10 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Erro", "Preencha todos os campos.");
+      Alert.alert(
+        i18n.t("checkin_error_alert_title"),
+        i18n.t("login_error_fill_fields")
+      );
       return;
     }
     setLoading(true);
@@ -35,7 +39,7 @@ const LoginScreen = () => {
       style={[styles.container, { backgroundColor: theme.background }]}
     >
       <Text style={[styles.title, { color: theme.text }]}>
-        MotoPark Manager
+        {i18n.t("login_title")}
       </Text>
       <TextInput
         style={[
@@ -46,7 +50,7 @@ const LoginScreen = () => {
             borderColor: theme.border,
           },
         ]}
-        placeholder="E-mail"
+        placeholder={i18n.t("login_email_placeholder")}
         placeholderTextColor={theme.placeholder}
         value={email}
         onChangeText={setEmail}
@@ -62,7 +66,7 @@ const LoginScreen = () => {
             borderColor: theme.border,
           },
         ]}
-        placeholder="Senha"
+        placeholder={i18n.t("login_password_placeholder")}
         placeholderTextColor={theme.placeholder}
         value={password}
         onChangeText={setPassword}
@@ -76,7 +80,7 @@ const LoginScreen = () => {
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.buttonText}>Entrar</Text>
+          <Text style={styles.buttonText}>{i18n.t("login_button")}</Text>
         )}
       </TouchableOpacity>
     </SafeAreaView>

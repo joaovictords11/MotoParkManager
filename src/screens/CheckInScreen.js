@@ -12,6 +12,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { checkIn, createMoto } from "../api/api";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
+import { scheduleLocalNotification } from "../services/notificationService";
 
 const CheckInScreen = () => {
   const navigation = useNavigation();
@@ -25,10 +27,10 @@ const CheckInScreen = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!placa) newErrors.placa = "A placa é obrigatória.";
+    if (!placa) newErrors.placa = i18n.t("checkin_error_plate_required");
     else if (placa.length < 7)
-      newErrors.placa = "A placa deve ter no mínimo 7 caracteres.";
-    if (!modelo) newErrors.modelo = "O modelo é obrigatório.";
+      newErrors.placa = i18n.t("checkin_error_plate_min");
+    if (!modelo) newErrors.modelo = i18n.t("checkin_error_model_required");
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -44,18 +46,25 @@ const CheckInScreen = () => {
       await createMoto({ placa, modelo });
       await checkIn(placa);
 
-      Alert.alert("Sucesso", `Check-in da moto ${placa} realizado!`, [
-        { text: "OK", onPress: () => navigation.goBack() },
-      ]);
+      // Agendamento da notificação
+      await scheduleLocalNotification(
+        i18n.t("checkin_notification_title"),
+        i18n.t("checkin_notification_body", { placa: placa })
+      );
+
+      Alert.alert(
+        i18n.t("checkin_success_alert_title"),
+        i18n.t("checkin_success_alert_message", { placa: placa }),
+        [{ text: "OK", onPress: () => navigation.goBack() }]
+      );
     } catch (error) {
       console.error(
         "Falha no check-in:",
         error.response?.data || error.message
       );
       const errorMessage =
-        error.response?.data?.message ||
-        "Não foi possível realizar o check-in.";
-      Alert.alert("Erro", errorMessage);
+        error.response?.data?.message || i18n.t("checkin_error_alert_message");
+      Alert.alert(i18n.t("checkin_error_alert_title"), errorMessage);
     } finally {
       setLoading(false);
     }
@@ -64,14 +73,14 @@ const CheckInScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Check-In de Moto</Text>
+        <Text style={styles.headerText}>{i18n.t("checkin_title")}</Text>
       </View>
 
       <View style={styles.formContainer}>
-        <Text style={styles.label}>Placa da Moto*</Text>
+        <Text style={styles.label}>{i18n.t("checkin_plate_label")}</Text>
         <TextInput
           style={[styles.input, errors.placa && styles.inputError]}
-          placeholder="Ex: ABC1D23"
+          placeholder={i18n.t("checkin_plate_placeholder")}
           placeholderTextColor={theme.placeholder}
           value={placa}
           onChangeText={setPlaca}
@@ -79,10 +88,10 @@ const CheckInScreen = () => {
         />
         {errors.placa && <Text style={styles.errorText}>{errors.placa}</Text>}
 
-        <Text style={styles.label}>Modelo*</Text>
+        <Text style={styles.label}>{i18n.t("checkin_model_label")}</Text>
         <TextInput
           style={[styles.input, errors.modelo && styles.inputError]}
-          placeholder="Ex: Honda CG 160"
+          placeholder={i18n.t("checkin_model_placeholder")}
           placeholderTextColor={theme.placeholder}
           value={modelo}
           onChangeText={setModelo}
@@ -97,7 +106,7 @@ const CheckInScreen = () => {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Registrar Check-In</Text>
+            <Text style={styles.buttonText}>{i18n.t("checkin_button")}</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -105,6 +114,7 @@ const CheckInScreen = () => {
   );
 };
 
+// ... (stylesFactory permanece o mesmo)
 const stylesFactory = (theme) =>
   StyleSheet.create({
     container: {

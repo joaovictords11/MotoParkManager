@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { getMotos } from "../api/api";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
 
 const MapScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -38,7 +39,10 @@ const MapScreen = () => {
       setMotoPositions(motosComPosicao);
     } catch (error) {
       console.error("Falha ao carregar posições:", error);
-      Alert.alert("Erro", "Não foi possível carregar as posições das motos.");
+      Alert.alert(
+        i18n.t("checkout_error_alert_title"),
+        i18n.t("map_error_load")
+      );
     } finally {
       setLoading(false);
     }
@@ -53,7 +57,7 @@ const MapScreen = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
-        <LoadingIndicator text="Carregando mapa..." />
+        <LoadingIndicator text={i18n.t("map_loading")} />
       </View>
     );
   }
@@ -61,7 +65,7 @@ const MapScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mapa do Pátio Mottu</Text>
+        <Text style={styles.headerText}>{i18n.t("map_title")}</Text>
       </View>
 
       <View style={styles.mapContainer}>
@@ -94,11 +98,16 @@ const MapScreen = () => {
 
       {selectedMoto && (
         <View style={styles.motoInfo}>
-          <Text style={styles.infoTitle}>Informações da Moto</Text>
-          <Text style={styles.infoText}>Placa: {selectedMoto.placa}</Text>
-          <Text style={styles.infoText}>Modelo: {selectedMoto.modelo}</Text>
+          <Text style={styles.infoTitle}>{i18n.t("map_info_title")}</Text>
           <Text style={styles.infoText}>
-            Entrada: {selectedMoto.checkInTime || "N/A"}
+            {i18n.t("map_info_plate")} {selectedMoto.placa}
+          </Text>
+          <Text style={styles.infoText}>
+            {i18n.t("map_info_model")} {selectedMoto.modelo}
+          </Text>
+          <Text style={styles.infoText}>
+            {i18n.t("map_info_entry")}{" "}
+            {selectedMoto.checkInTime || i18n.t("home_stats_na")}
           </Text>
         </View>
       )}
@@ -106,6 +115,7 @@ const MapScreen = () => {
   );
 };
 
+// ... (stylesFactory permanece o mesmo)
 const stylesFactory = (theme) =>
   StyleSheet.create({
     container: {

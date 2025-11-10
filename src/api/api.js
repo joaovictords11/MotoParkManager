@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://192.168.68.52:8080/";
+const API_BASE_URL =
+  "http://patio-api-sprint-dns.eastus.azurecontainer.io:8080/";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

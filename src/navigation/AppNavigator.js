@@ -1,4 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import i18n from "../i18n/i18n";
+import AboutScreen from "../screens/AboutScreen";
 import CheckInScreen from "../screens/CheckInScreen";
 import CheckOutScreen from "../screens/CheckOutScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -14,32 +16,37 @@ const MainNavigator = () => (
     <Stack.Screen
       name="Home"
       component={HomeScreen}
-      options={{ title: "MotoPark Manager" }}
+      options={{ title: i18n.t("home_title") }}
     />
     <Stack.Screen
       name="Map"
       component={MapScreen}
-      options={{ title: "Mapa do Pátio" }}
+      options={{ title: i18n.t("map_title") }}
     />
     <Stack.Screen
       name="CheckIn"
       component={CheckInScreen}
-      options={{ title: "Check-In" }}
+      options={{ title: i18n.t("checkin_title") }}
     />
     <Stack.Screen
       name="CheckOut"
       component={CheckOutScreen}
-      options={{ title: "Check-Out" }}
+      options={{ title: i18n.t("checkout_title") }}
     />
     <Stack.Screen
       name="Settings"
       component={SettingsScreen}
-      options={{ title: "Configurações" }}
+      options={{ title: i18n.t("settings_title") }}
     />
     <Stack.Screen
       name="Reports"
       component={ReportsScreen}
-      options={{ title: "Relatórios" }}
+      options={{ title: i18n.t("reports_title") }}
+    />
+    <Stack.Screen
+      name="About"
+      component={AboutScreen}
+      options={{ title: i18n.t("about_title") }}
     />
   </Stack.Navigator>
 );

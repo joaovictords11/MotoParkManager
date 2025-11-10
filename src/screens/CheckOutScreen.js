@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { checkOut, getMotos } from "../api/api";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
 
 const CheckOutScreen = () => {
   const navigation = useNavigation();
@@ -31,7 +32,10 @@ const CheckOutScreen = () => {
       setMotos(response.data.content || response.data || []);
     } catch (error) {
       console.error("Falha ao carregar as motos:", error);
-      Alert.alert("Erro", "Não foi possível carregar as motos do pátio.");
+      Alert.alert(
+        i18n.t("checkout_error_alert_title"),
+        i18n.t("checkout_error_load")
+      );
     } finally {
       setLoading(false);
     }
@@ -46,24 +50,34 @@ const CheckOutScreen = () => {
 
   const handleCheckOut = async () => {
     if (!selectedMoto) {
-      Alert.alert("Erro", "Selecione uma moto para fazer o check-out.");
+      Alert.alert(
+        i18n.t("checkout_error_alert_title"),
+        i18n.t("checkout_error_select_moto")
+      );
       return;
     }
     setCheckoutLoading(true);
     try {
       await checkOut(selectedMoto.placa);
-      Alert.alert("Sucesso", "Check-out realizado com sucesso!", [
-        {
-          text: "OK",
-          onPress: () => {
-            setMotos(motos.filter((m) => m.placa !== selectedMoto.placa));
-            setSelectedMoto(null);
+      Alert.alert(
+        i18n.t("checkout_success_alert_title"),
+        i18n.t("checkout_success_alert_message"),
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setMotos(motos.filter((m) => m.placa !== selectedMoto.placa));
+              setSelectedMoto(null);
+            },
           },
-        },
-      ]);
+        ]
+      );
     } catch (error) {
       console.error("Falha no check-out:", error);
-      Alert.alert("Erro", "Não foi possível realizar o check-out.");
+      Alert.alert(
+        i18n.t("checkout_error_alert_title"),
+        i18n.t("checkout_error_alert_message")
+      );
     } finally {
       setCheckoutLoading(false);
     }
@@ -72,7 +86,7 @@ const CheckOutScreen = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
-        <LoadingIndicator text="Buscando motos no pátio..." />
+        <LoadingIndicator text={i18n.t("checkout_loading")} />
       </View>
     );
   }
@@ -80,13 +94,11 @@ const CheckOutScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Check-Out de Moto</Text>
+        <Text style={styles.headerText}>{i18n.t("checkout_title")}</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.subtitle}>
-          Selecione uma moto para registrar a saída:
-        </Text>
+        <Text style={styles.subtitle}>{i18n.t("checkout_subtitle")}</Text>
 
         <FlatList
           data={motos}
@@ -105,7 +117,7 @@ const CheckOutScreen = () => {
           )}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>Nenhuma moto no pátio</Text>
+              <Text style={styles.emptyText}>{i18n.t("checkout_empty")}</Text>
             </View>
           }
         />
@@ -122,7 +134,7 @@ const CheckOutScreen = () => {
             {checkoutLoading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Registrar Check-Out</Text>
+              <Text style={styles.buttonText}>{i18n.t("checkout_button")}</Text>
             )}
           </TouchableOpacity>
         )}
@@ -131,6 +143,7 @@ const CheckOutScreen = () => {
   );
 };
 
+// ... (stylesFactory permanece o mesmo)
 const stylesFactory = (theme) =>
   StyleSheet.create({
     container: {

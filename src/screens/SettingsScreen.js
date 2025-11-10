@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import {
   Alert,
@@ -9,24 +10,29 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeContext } from "../contexts/ThemeContext";
+import i18n from "../i18n/i18n";
 
 const SettingsScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
   const styles = stylesFactory(theme);
+  const navigation = useNavigation();
 
   const handleSaveChanges = () => {
-    Alert.alert("Sucesso", "Configurações salvas!");
+    Alert.alert(
+      i18n.t("settings_save_success_title"),
+      i18n.t("settings_save_success_message")
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Configurações do App</Text>
+        <Text style={styles.headerText}>{i18n.t("settings_title")}</Text>
       </View>
 
       <View style={styles.settingsContainer}>
         <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Modo Escuro</Text>
+          <Text style={styles.settingText}>{i18n.t("settings_dark_mode")}</Text>
           <Switch
             value={isDarkMode}
             onValueChange={toggleTheme}
@@ -36,17 +42,30 @@ const SettingsScreen = () => {
         </View>
 
         <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Notificações</Text>
+          <Text style={styles.settingText}>
+            {i18n.t("settings_notifications")}
+          </Text>
           <Switch disabled />
         </View>
 
         <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Grade no Mapa</Text>
+          <Text style={styles.settingText}>{i18n.t("settings_map_grid")}</Text>
           <Switch value={true} disabled />
         </View>
 
+        <TouchableOpacity
+          style={styles.aboutButton}
+          onPress={() => navigation.navigate("About")}
+        >
+          <Text style={styles.settingText}>
+            {i18n.t("settings_about_button")}
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-          <Text style={styles.saveButtonText}>Salvar Configurações</Text>
+          <Text style={styles.saveButtonText}>
+            {i18n.t("settings_save_button")}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -76,6 +95,11 @@ const stylesFactory = (theme) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      paddingVertical: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.border,
+    },
+    aboutButton: {
       paddingVertical: 15,
       borderBottomWidth: 1,
       borderBottomColor: theme.border,
